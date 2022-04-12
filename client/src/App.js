@@ -1,7 +1,20 @@
+import { Routes, Route } from "react-router-dom";
+import AdminPanel from "./screens/Admin/AdminPanel";
+import SignIn from "./screens/Admin/SignIn";
 import Home from "./screens/Home";
 
 function App() {
-  return <Home />;
+  return (
+    <Routes>
+      <Route path="/">
+        <Route index element={<Home />} />
+        <Route path="admin">
+          <Route index element={<SignIn />} />
+          <Route path="welcome" element={<AdminPanel />} />
+        </Route>
+      </Route>
+    </Routes>
+  );
 }
 
 export default App;

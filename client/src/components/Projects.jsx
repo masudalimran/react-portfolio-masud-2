@@ -2,13 +2,13 @@ import {
   Card,
   CardActionArea,
   CardContent,
-  CardMedia,
   Grid,
   Typography,
 } from "@mui/material";
 import React from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
-export default function CurrentProjects({ activeTab }) {
+export default function Projects({ activeTab }) {
   return (
     <Grid container justifyContent="center" spacing={2} sx={{ my: 1 }}>
       {[
@@ -23,10 +23,8 @@ export default function CurrentProjects({ activeTab }) {
         <Grid item key={i}>
           <Card sx={{ maxWidth: 345 }}>
             <CardActionArea>
-              <CardMedia
-                component="img"
-                height="140"
-                image={
+              <LazyLoadImage
+                src={
                   activeTab === "current"
                     ? "https://images.unsplash.com/photo-1487611459768-bd414656ea10?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
                     : activeTab === "completed"
@@ -34,8 +32,10 @@ export default function CurrentProjects({ activeTab }) {
                     : activeTab === "willDo" &&
                       "https://images.unsplash.com/photo-1648737963059-59ec8e2d50c5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
                 }
+                effect="blur"
                 alt={x}
                 title={x}
+                style={{ width: "345px", height: "140px", objectFit: "cover" }}
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">

@@ -1,16 +1,7 @@
 import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
-import {
-  Button,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
-  Divider,
-  Grid,
-  Box,
-} from "@mui/material";
-import CurrentProjects from "../components/CurrentProjects";
+import { Button, Divider, Grid, Box, Link } from "@mui/material";
+import Projects from "../components/Projects";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("current");
@@ -18,10 +9,21 @@ export default function Home() {
   return (
     <>
       {/* Heading */}
-      <Typography variant="h5" align="center">
-        Imon's Portfolio
-      </Typography>
-      <Divider />
+      <Grid container justifyContent="flex-end">
+        <Grid item xs={10}>
+          <Typography variant="h5" align="center">
+            Imon's Portfolio
+          </Typography>
+        </Grid>
+        <Grid item xs={1}>
+          <Link href="/admin" underline="none">
+            <Button variant="contained" color="error" size="small">
+              Admin Area
+            </Button>
+          </Link>
+        </Grid>
+      </Grid>
+      <Divider sx={{ mt: 1 }} />
 
       {/* Selectors */}
       <Grid container justifyContent="center" sx={{ mt: 1 }} spacing={2}>
@@ -66,7 +68,7 @@ export default function Home() {
         </Grid>
       </Grid>
       {/* Current projects */}
-      <CurrentProjects activeTab={activeTab} />
+      <Projects activeTab={activeTab} />
     </>
   );
 }
