@@ -16,7 +16,7 @@ export default function Home() {
           </Typography>
         </Grid>
         <Grid item xs={1}>
-          <Link href="/admin" underline="none">
+          <Link href="/admin" underline="none" target="_blank">
             <Button variant="contained" color="error" size="small">
               Admin Area
             </Button>

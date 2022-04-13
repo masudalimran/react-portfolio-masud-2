@@ -1,21 +1,21 @@
 import React from "react";
 import AddIcon from "@mui/icons-material/Add";
-import BallotIcon from "@mui/icons-material/Ballot";
+// import BallotIcon from "@mui/icons-material/Ballot";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import {
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
-  ListItemText,
   Typography,
 } from "@mui/material";
 
-export default function AdminMenu() {
+export default function AdminMenu({ setTabSelector }) {
   return (
     <List>
       <ListItem disablePadding>
-        <ListItemButton>
+        <ListItemButton onClick={() => setTabSelector("dashboard")}>
           <ListItemIcon>
             <DashboardIcon />
           </ListItemIcon>
@@ -23,7 +23,7 @@ export default function AdminMenu() {
         </ListItemButton>
       </ListItem>
       <ListItem disablePadding>
-        <ListItemButton>
+        <ListItemButton onClick={() => setTabSelector("createProj")}>
           <ListItemIcon>
             <AddIcon />
           </ListItemIcon>
@@ -31,11 +31,11 @@ export default function AdminMenu() {
         </ListItemButton>
       </ListItem>
       <ListItem disablePadding>
-        <ListItemButton>
+        <ListItemButton onClick={() => setTabSelector("createProj")}>
           <ListItemIcon>
-            <BallotIcon />
+            <AdminPanelSettingsIcon />
           </ListItemIcon>
-          <Typography variant="subtitle2">View All Project</Typography>
+          <Typography variant="subtitle2">Add Admin</Typography>
         </ListItemButton>
       </ListItem>
     </List>

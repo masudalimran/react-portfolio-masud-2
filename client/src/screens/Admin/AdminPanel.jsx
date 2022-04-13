@@ -9,19 +9,14 @@ import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
 import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import AdminMenu from "./AdminMenu";
-import { Avatar, Button } from "@mui/material";
-import LatestProjects from "./LatestProjects";
-// import { mainListItems, secondaryListItems } from './listItems';
-// import Chart from './Chart';
-// import Deposits from './Deposits';
-// import Orders from './Orders';
+import LogoutIcon from "@mui/icons-material/Logout";
+import { Button } from "@mui/material";
+import DashBoard from "./DashBoard";
+import CreateProject from "./CreateProject";
 
 function Copyright(props) {
   return (
@@ -91,6 +86,7 @@ const mdTheme = createTheme();
 
 function DashboardContent() {
   const [open, setOpen] = React.useState(true);
+  const [tabSelector, setTabSelector] = React.useState("dashboard");
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -131,12 +127,18 @@ function DashboardContent() {
                 Frontend
               </Button>
             </Link>
-            <IconButton color="inherit">
-              <Avatar
-                alt="Remy Sharp"
-                src="https://mui.com/static/images/avatar/1.jpg"
-                sx={{ width: 35, height: 35 }}
-              />
+            <IconButton
+              color="inherit"
+              title="logout"
+              sx={{
+                border: "1px solid black",
+                ml: 2,
+                "&:hover": {
+                  background: "black",
+                },
+              }}
+            >
+              <LogoutIcon size="small" color="error" />
             </IconButton>
           </Toolbar>
         </AppBar>
@@ -155,7 +157,7 @@ function DashboardContent() {
           </Toolbar>
           <Divider />
           <List component="nav">
-            <AdminMenu />
+            <AdminMenu setTabSelector={setTabSelector} />
             <Divider sx={{ my: 1 }} />
             {/* {secondaryListItems} */}
           </List>
@@ -173,44 +175,13 @@ function DashboardContent() {
           }}
         >
           <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              {/* Latest Projects */}
-              <Grid item xs={12} md={8} lg={9}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    height: 240,
-                  }}
-                >
-                  {/* <Chart /> */}
-                  <LatestProjects />
-                </Paper>
-              </Grid>
-              {/* Recent Deposits */}
-              <Grid item xs={12} md={4} lg={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    height: 240,
-                  }}
-                >
-                  {/* <Deposits /> */}
-                </Paper>
-              </Grid>
-              {/* Recent Orders */}
-              <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                  {/* <Orders /> */}
-                </Paper>
-              </Grid>
-            </Grid>
-            <Copyright sx={{ pt: 4 }} />
-          </Container>
+          {tabSelector === "dashboard" ? (
+            <DashBoard />
+          ) : (
+            tabSelector === "createProj" && <CreateProject />
+          )}
+
+          <Copyright sx={{ pt: 4 }} />
         </Box>
       </Box>
     </ThemeProvider>
