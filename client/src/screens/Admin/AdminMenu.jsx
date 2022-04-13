@@ -31,7 +31,7 @@ export default function AdminMenu({ setTabSelector }) {
         </ListItemButton>
       </ListItem>
       <ListItem disablePadding>
-        <ListItemButton onClick={() => setTabSelector("createProj")}>
+        <ListItemButton onClick={() => setTabSelector("addAdmin")}>
           <ListItemIcon>
             <AdminPanelSettingsIcon />
           </ListItemIcon>

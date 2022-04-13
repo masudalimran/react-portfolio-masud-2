@@ -17,6 +17,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { Button } from "@mui/material";
 import DashBoard from "./DashBoard";
 import CreateProject from "./CreateProject";
+import AddAdmin from "./AddAdmin";
 
 function Copyright(props) {
   return (
@@ -177,8 +178,10 @@ function DashboardContent() {
           <Toolbar />
           {tabSelector === "dashboard" ? (
             <DashBoard />
+          ) : tabSelector === "createProj" ? (
+            <CreateProject />
           ) : (
-            tabSelector === "createProj" && <CreateProject />
+            tabSelector === "addAdmin" && <AddAdmin />
           )}
 
           <Copyright sx={{ pt: 4 }} />
