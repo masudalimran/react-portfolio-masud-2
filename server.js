@@ -1,14 +1,24 @@
 // imports
 import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
 import cors from "cors";
 import {} from "dotenv/config";
 import mongoose from "mongoose";
 import adminRouter from "./routes/adminRoutes.js";
 import projectRouter from "./routes/projectRoutes.js";
+import multerRouter from "./routes/multerRoutes.js";
 
 // Initializations
 const app = express();
 const port = process.env.PORT || 3100;
+
+// manage filename & dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Uploads folder setup
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 // Middleware
 app.use(cors());
@@ -28,7 +38,6 @@ mongoose.connect(
     console.err(err);
   }
 );
-
 // Routes
 app.get("/", (req, res) => {
   res.send("Server Running");
@@ -36,6 +45,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/admin/", adminRouter);
 app.use("/api/project/", projectRouter);
+app.use("/api/multer/", multerRouter);
 
 // Server
 app.listen(port, () => {

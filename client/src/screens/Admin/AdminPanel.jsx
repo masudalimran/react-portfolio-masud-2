@@ -18,6 +18,9 @@ import { Button } from "@mui/material";
 import DashBoard from "./DashBoard";
 import CreateProject from "./CreateProject";
 import AddAdmin from "./AddAdmin";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/features/admin";
 
 function Copyright(props) {
   return (
@@ -92,6 +95,22 @@ function DashboardContent() {
     setOpen(!open);
   };
 
+  // Use Effect
+  // Login Check
+  const localData = JSON.parse(localStorage.getItem("loginInfo"));
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    !localData && navigate("/admin");
+  }, []);
+
+  // Functions
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    localStorage.removeItem("loginInfo");
+    dispatch(logout());
+    navigate("/admin");
+  };
+
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>
@@ -131,6 +150,7 @@ function DashboardContent() {
             <IconButton
               color="inherit"
               title="logout"
+              onClick={handleLogout}
               sx={{
                 border: "1px solid black",
                 ml: 2,

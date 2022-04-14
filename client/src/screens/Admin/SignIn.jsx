@@ -1,6 +1,5 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
@@ -10,7 +9,12 @@ import Grid from "@mui/material/Grid";
 import LockIcon from "@mui/icons-material/Lock";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import LoadingButton from "@mui/lab/LoadingButton";
+import LoginIcon from "@mui/icons-material/Login";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { signInAdmin } from "../../redux/features/admin";
+import { Alert, Button } from "@mui/material";
 
 function Copyright(props) {
   return (
@@ -37,16 +41,29 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignIn() {
+  // Use State
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // store
+  const { pending, error, loginAdmin } = useSelector((state) => state.admin);
+
+  // Local Storage
+  const localData = JSON.parse(localStorage.getItem("loginInfo"));
+
+  // Functions
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("name"),
-      password: data.get("password"),
-    });
-    navigate("/admin/dashboard");
+    dispatch(signInAdmin({ username, password }));
   };
+
+  // use Effect
+  React.useEffect(() => {
+    localData && navigate("/admin/dashboard");
+  }, [localData, navigate]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -69,6 +86,15 @@ export default function SignIn() {
           }}
         />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+          <Button
+            variant="contained"
+            size="small"
+            color="warning"
+            fullWidth
+            onClick={() => navigate("/")}
+          >
+            Back
+          </Button>
           <Box
             sx={{
               my: 8,
@@ -99,6 +125,7 @@ export default function SignIn() {
                 name="name"
                 autoComplete="name"
                 autoFocus
+                onChange={(e) => setUsername(e.target.value)}
               />
               <TextField
                 margin="normal"
@@ -109,15 +136,23 @@ export default function SignIn() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={(e) => setPassword(e.target.value)}
               />
-              <Button
+              {loginAdmin.message && (
+                <Alert severity="error">{loginAdmin.message}</Alert>
+              )}
+              {error && <Alert severity="error">Something Went Wrong...</Alert>}
+              <LoadingButton
                 type="submit"
-                fullWidth
+                endIcon={<LoginIcon />}
+                loading={pending}
+                loadingPosition="end"
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                fullWidth
               >
                 Administrate
-              </Button>
+              </LoadingButton>
               <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>

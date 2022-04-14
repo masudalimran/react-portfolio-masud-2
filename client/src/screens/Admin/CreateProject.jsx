@@ -14,6 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import { PF } from "../../PublicFolder";
 
 export default function CreateProject() {
   // Use State
@@ -42,7 +43,7 @@ export default function CreateProject() {
         >
           <Grid item>
             <img
-              src="https://images.unsplash.com/photo-1487611459768-bd414656ea10?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+              src={PF + "00000no_231_image.jpg"}
               alt="Halloween party"
               style={{
                 objectFit: "cover",

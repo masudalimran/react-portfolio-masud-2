@@ -26,8 +26,8 @@ adminRouter.post("/signIn", async (req, res) => {
   }
 });
 
-// Register Admin
-adminRouter.post("/register", async (req, res) => {
+// Add Admin
+adminRouter.post("/add", async (req, res) => {
   try {
     const usernameExists = await Admin.findOne({ username: req.body.username });
     if (!usernameExists) {
@@ -84,6 +84,21 @@ adminRouter.delete("/:id", async (req, res) => {
       res.status(500).json({ message: error.message });
     }
   } else res.status(201).json({ message: "User Not Found!" });
+});
+
+// Get All Admin
+adminRouter.get("/", async (req, res) => {
+  try {
+    const admins = await Admin.find();
+    let adminsWOPass = [];
+    admins.map((x, i) => {
+      const { password, ...others } = x._doc;
+      adminsWOPass.push(others);
+    });
+    res.json(adminsWOPass);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
 });
 
 export default adminRouter;
