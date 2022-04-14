@@ -11,8 +11,6 @@ const fileEngineStorageAdmin = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     cb(null, req.body.name);
-    // const ext = file.originalname.split(".");
-    // cb(null, Date.now() + "-DemoImage." + ext.slice(-1));
   },
 });
 
@@ -25,8 +23,6 @@ const fileEngineStorageProject = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     cb(null, req.body.name);
-    // const ext = file.originalname.split(".");
-    // cb(null, Date.now() + "-DemoImage." + ext.slice(-1));
   },
 });
 
