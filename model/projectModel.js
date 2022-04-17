@@ -17,7 +17,19 @@ const projectSchema = new mongoose.Schema(
       required: true,
     },
     projectTag: String,
+    adminId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Admin",
+      required: true,
+    },
+    categoryId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "category",
+      required: true,
+      default: "Not Categorized",
+    },
   },
+
   {
     timestamps: true,
   }

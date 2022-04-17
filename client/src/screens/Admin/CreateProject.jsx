@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  Alert,
   Autocomplete,
   Box,
   Button,
+  createFilterOptions,
   Dialog,
   DialogActions,
   DialogContent,
@@ -15,158 +17,220 @@ import {
 } from "@mui/material";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import { PF } from "../../PublicFolder";
+import { useDispatch, useSelector } from "react-redux";
+import { createCat, getAllCat } from "../../redux/features/category";
+import Loading from "../../components/Loading";
 
 export default function CreateProject() {
   // Use State
   const [addTagDialogue, setAddTagDialogue] = useState(false);
+  const [projImg, setProjImg] = useState("");
+  const [projName, setProjName] = useState("");
+  const [shortDesc, setShortDesc] = useState("");
+  const [projLink, setProjLink] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [createdCategory, setCreatedCategory] = useState("");
+
+  console.log(categories);
+
+  const dispatch = useDispatch();
+
+  // Store
+  const { pending, error, allCat } = useSelector((state) => state.category);
+
+  // UseEffect
+  useEffect(() => {
+    dispatch(getAllCat());
+  }, [dispatch]);
 
   // Functions
   const handleCreateProject = (e) => {
     e.preventDefault();
     console.log("code ran");
   };
+
+  const handleCreateCategory = () => {
+    dispatch(createCat({ catName: createdCategory }));
+    dispatch(getAllCat());
+    setAddTagDialogue(false);
+  };
+
+  // Limit options to show in autocomplete
+  const OPTIONS_LIMIT = 4;
+  const defaultFilterOptions = createFilterOptions();
+
+  const filterOptions = (options, state) => {
+    return defaultFilterOptions(options, state).slice(0, OPTIONS_LIMIT);
+  };
+
   return (
     <>
-      <Typography
-        variant="h4"
-        align="center"
-        sx={{ textDecoration: "underline" }}
-      >
-        Add Project
-      </Typography>
-      <Box component="form" onSubmit={(e) => handleCreateProject(e)}>
-        <Grid
-          container
-          flexDirection="column"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Grid item>
-            <img
-              src={PF + "00000no_231_image.jpg"}
-              alt="Halloween party"
-              style={{
-                objectFit: "cover",
-                width: "100%",
-                height: "150px",
-              }}
-            />
-            <Typography variant="body2" align="center" color="secondary">
-              Recommended: 🖼️(1200x600)
-            </Typography>
-          </Grid>
-          <Grid item position="absolute">
-            <label htmlFor="icon-button-file">
-              <Input
-                accept="image/*"
-                id="icon-button-file"
-                type="file"
-                sx={{ display: "none" }}
-                //   onChange={(e) => setBlogImage(e.target.files[0])}
-              />
-              <IconButton
-                color="primary"
-                aria-label="upload-picture"
-                component="span"
-              >
-                <PhotoCamera />
-              </IconButton>
-            </label>
-          </Grid>
-        </Grid>
-        <Grid container flexDirection="column" alignItems="center" spacing={2}>
-          <Grid item sx={{ width: "90%" }}>
-            <TextField
-              fullWidth
-              required
-              label="Project Name"
-              type="search"
-              variant="standard"
-              autoFocus
-            />
-          </Grid>
-          <Grid item sx={{ width: "90%" }}>
-            <TextField
-              fullWidth
-              required
-              label="Short Description"
-              type="search"
-              variant="standard"
-            />
-          </Grid>
-          <Grid item sx={{ width: "90%" }}>
-            <TextField
-              required
-              fullWidth
-              label="Project Link"
-              type="url"
-              variant="standard"
-            />
-          </Grid>
-          <Grid item sx={{ width: "90%" }}>
-            <Grid container justifyContent="space-between" alignItems="center">
-              <Grid item sx={{ flexGrow: 1 }}>
-                <Autocomplete
-                  fullWidth
-                  multiple
-                  id="tags-outlined"
-                  options={top100Films}
-                  getOptionLabel={(option) => option.title}
-                  filterSelectedOptions
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Category Tags (up to 3)"
-                      placeholder="Choose Tags"
-                      variant="standard"
-                    />
-                  )}
-                />
-              </Grid>
+      {pending ? (
+        <Loading />
+      ) : error ? (
+        <Alert severity="error">Something Went Wrong...</Alert>
+      ) : (
+        <>
+          <Typography
+            variant="h4"
+            align="center"
+            sx={{ textDecoration: "underline" }}
+          >
+            Add Project
+          </Typography>
+          <Box component="form" onSubmit={(e) => handleCreateProject(e)}>
+            <Grid
+              container
+              flexDirection="column"
+              justifyContent="center"
+              alignItems="center"
+            >
               <Grid item>
-                <Button
-                  variant="contained"
-                  onClick={() => setAddTagDialogue(true)}
-                >
-                  Add Tag
-                </Button>
-                {/* Add Tag Dialogue */}
-                <Dialog
-                  open={addTagDialogue}
-                  onClose={() => setAddTagDialogue(false)}
-                  aria-labelledby="add-tag"
-                  aria-describedby="add-additional-tags"
-                >
-                  <DialogTitle id="add-tag-title">{"Add Tag"}</DialogTitle>
-                  <DialogContent>
-                    <TextField
-                      required
-                      label="Tag Name"
-                      variant="standard"
-                    ></TextField>
-                  </DialogContent>
-                  <DialogActions>
-                    <Button
-                      onClick={() => setAddTagDialogue(false)}
-                      color="error"
-                    >
-                      Cancel
-                    </Button>
-                    <Button onClick={() => setAddTagDialogue(false)} autoFocus>
-                      Add Tag
-                    </Button>
-                  </DialogActions>
-                </Dialog>
+                <img
+                  src={PF + "00000no_231_image.jpg"}
+                  alt="Halloween party"
+                  style={{
+                    objectFit: "cover",
+                    width: "100%",
+                    height: "150px",
+                  }}
+                />
+                <Typography variant="body2" align="center" color="secondary">
+                  Recommended: 🖼️(1200x600)
+                </Typography>
+              </Grid>
+              <Grid item position="absolute">
+                <label htmlFor="icon-button-file">
+                  <Input
+                    accept="image/*"
+                    id="icon-button-file"
+                    type="file"
+                    sx={{ display: "none" }}
+                    onChange={(e) => setProjImg(e.target.files[0])}
+                  />
+                  <IconButton
+                    color="primary"
+                    aria-label="upload-picture"
+                    component="span"
+                  >
+                    <PhotoCamera />
+                  </IconButton>
+                </label>
               </Grid>
             </Grid>
-          </Grid>
-          <Grid item sx={{ width: "90%" }}>
-            <Button variant="contained" fullWidth type="submit">
-              Publish
-            </Button>
-          </Grid>
-        </Grid>
-      </Box>
+            <Grid
+              container
+              flexDirection="column"
+              alignItems="center"
+              spacing={2}
+            >
+              <Grid item sx={{ width: "90%" }}>
+                <TextField
+                  fullWidth
+                  required
+                  label="Project Name"
+                  type="search"
+                  variant="standard"
+                  onChange={(e) => setProjName(e.target.value)}
+                  autoFocus
+                />
+              </Grid>
+              <Grid item sx={{ width: "90%" }}>
+                <TextField
+                  fullWidth
+                  required
+                  label="Short Description"
+                  type="search"
+                  variant="standard"
+                  onChange={(e) => setShortDesc(e.target.value)}
+                />
+              </Grid>
+              <Grid item sx={{ width: "90%" }}>
+                <TextField
+                  required
+                  fullWidth
+                  label="Project Link"
+                  type="url"
+                  variant="standard"
+                  onChange={(e) => setProjLink(e.target.value)}
+                />
+              </Grid>
+              <Grid item sx={{ width: "90%" }}>
+                <Grid
+                  container
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Grid item sx={{ flexGrow: 1 }}>
+                    <Autocomplete
+                      fullWidth
+                      multiple
+                      id="tags-outlined"
+                      options={allCat}
+                      getOptionLabel={(option) => option.catName}
+                      filterSelectedOptions
+                      filterOptions={filterOptions}
+                      onChange={(e) => setCategories(e.target.value)}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Category Tags (up to 3)"
+                          placeholder="Choose Tags"
+                          variant="standard"
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      variant="contained"
+                      onClick={() => setAddTagDialogue(true)}
+                    >
+                      Add Tag
+                    </Button>
+
+                    {/* Add Tag Dialogue */}
+                    <Dialog
+                      open={addTagDialogue}
+                      component="form"
+                      onSubmit={handleCreateCategory}
+                      onClose={() => setAddTagDialogue(false)}
+                      aria-labelledby="add-tag"
+                      aria-describedby="add-additional-tags"
+                    >
+                      <DialogTitle id="add-tag-title">{"Add Tag"}</DialogTitle>
+                      <DialogContent>
+                        <TextField
+                          required
+                          label="Tag Name"
+                          variant="standard"
+                          onChange={(e) => setCreatedCategory(e.target.value)}
+                        ></TextField>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button
+                          onClick={() => setAddTagDialogue(false)}
+                          color="error"
+                        >
+                          Cancel
+                        </Button>
+                        <Button type="submit" autoFocus>
+                          Add Tag
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item sx={{ width: "90%" }}>
+                <Button variant="contained" fullWidth type="submit">
+                  Publish
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </>
+      )}
     </>
   );
 }

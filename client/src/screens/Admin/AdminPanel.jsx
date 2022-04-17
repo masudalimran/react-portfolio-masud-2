@@ -101,7 +101,7 @@ function DashboardContent() {
   const navigate = useNavigate();
   React.useEffect(() => {
     !localData && navigate("/admin");
-  }, []);
+  }, [localData, navigate]);
 
   // Functions
   const dispatch = useDispatch();

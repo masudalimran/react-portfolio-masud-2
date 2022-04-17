@@ -8,6 +8,7 @@ import mongoose from "mongoose";
 import adminRouter from "./routes/adminRoutes.js";
 import projectRouter from "./routes/projectRoutes.js";
 import multerRouter from "./routes/multerRoutes.js";
+import categoryRouter from "./routes/CategoryRoutes.js";
 
 // Initializations
 const app = express();
@@ -46,6 +47,7 @@ app.get("/", (req, res) => {
 app.use("/api/admin/", adminRouter);
 app.use("/api/project/", projectRouter);
 app.use("/api/multer/", multerRouter);
+app.use("/api/category/", categoryRouter);
 
 // Server
 app.listen(port, () => {
